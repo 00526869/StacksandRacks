@@ -1,38 +1,30 @@
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  Alert,
+  View, Text, TextInput, TouchableOpacity,
+  StyleSheet, SafeAreaView, Alert
 } from 'react-native';
-
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
-const API_BASE_URL = 'http://192.168.0.178:8080/api/users'; // Replace with your backend IP
+const API_BASE_URL = 'http://192.168.0.178:8081/api/users';
 
 export default function LoginScreen({ onLoginSuccess }) {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    axios
-      .post(`${API_BASE_URL}/login`, { email, password })
-      .then((res) => {
-        if (res.data === 'Login successful') {
-          onLoginSuccess(); // 👈 Notifies App.js to unlock the tab screens
-        } else {
-          Alert.alert('Login Failed', res.data);
-        }
-      })
-      .catch((err) => {
-        console.error('Login Error:', err);
-        Alert.alert('Error logging in');
-      });
+  const handleLogin = async () => {
+    try {
+      const res = await axios.post(`${API_BASE_URL}/login`, { email, password });
+      if (res.data === 'Login successful') {
+        onLoginSuccess(); // Unlock tabs
+      } else {
+        Alert.alert('Login Failed', res.data);
+      }
+    } catch (err) {
+      console.error('Login Error:', err.message);
+      Alert.alert('Error logging in', err.response?.data || err.message);
+    }
   };
 
   const handleCreateAccount = () => {
@@ -42,28 +34,25 @@ export default function LoginScreen({ onLoginSuccess }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Welcome to Stacks & Racks</Text>
-
       <TextInput
         style={styles.input}
         placeholder="Email"
-        autoCapitalize="none"
-        keyboardType="email-address"
+        placeholderTextColor="#ccc" 
         onChangeText={setEmail}
         value={email}
+        autoCapitalize="none"
       />
-
       <TextInput
         style={styles.input}
         placeholder="Password"
-        secureTextEntry
+        placeholderTextColor="#ccc" 
         onChangeText={setPassword}
         value={password}
+        secureTextEntry
       />
-
       <TouchableOpacity style={styles.buttonPrimary} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
-
       <TouchableOpacity style={styles.buttonSecondary} onPress={handleCreateAccount}>
         <Text style={styles.buttonText}>Create Account</Text>
       </TouchableOpacity>
@@ -74,43 +63,46 @@ export default function LoginScreen({ onLoginSuccess }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#1e1e1e', // dark grey
     paddingHorizontal: 20,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#fff',
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 40
   },
   input: {
     height: 50,
-    backgroundColor: '#fff',
+    backgroundColor: '#333',
+    color: '#fff',
     borderRadius: 8,
     paddingHorizontal: 15,
     marginBottom: 15,
     fontSize: 16,
-    borderColor: '#ccc',
-    borderWidth: 1,
+    borderColor: '#555',
+    borderWidth: 1
   },
   buttonPrimary: {
     backgroundColor: '#007bff',
     paddingVertical: 14,
     borderRadius: 8,
-    marginTop: 10,
+    marginTop: 10
   },
   buttonSecondary: {
     backgroundColor: '#28a745',
     paddingVertical: 14,
     borderRadius: 8,
-    marginTop: 10,
+    marginTop: 10
   },
   buttonText: {
     color: '#fff',
     fontSize: 18,
     textAlign: 'center',
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'
+  }
 });
+
+

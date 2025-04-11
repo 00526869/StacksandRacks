@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://192.168.0.178:8080/api/dietplans'; // replace with your IP
+const API_BASE_URL = 'http://192.168.0.178:8081/api/dietplans'; // replace with your IP
 
 export default function MealsEatenScreen() {
   const [dietPlans, setDietPlans] = useState([]);
@@ -77,12 +77,14 @@ export default function MealsEatenScreen() {
         <TextInput
           style={styles.input}
           placeholder="Meal Name"
+          placeholderTextColor="#ccc"
           value={mealName}
           onChangeText={setMealName}
         />
         <TextInput
           style={styles.input}
           placeholder="Calories"
+          placeholderTextColor="#ccc"
           value={calories}
           onChangeText={setCalories}
           keyboardType="numeric"
@@ -108,13 +110,55 @@ export default function MealsEatenScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, paddingTop: 40, backgroundColor: '#fff' },
-  header: { fontSize: 26, fontWeight: 'bold', marginBottom: 10, textAlign: 'center' },
-  section: { marginVertical: 10 },
-  subHeader: { fontSize: 20, marginVertical: 15, fontWeight: 'bold' },
-  input: { borderWidth: 1, borderColor: '#ccc', marginBottom: 10, borderRadius: 6, padding: 10 },
-  mealItem: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#eee' },
-  mealText: { fontSize: 18 },
-  deleteButton: { fontSize: 16, color: 'red' },
-  text: { fontSize: 16, color: '#888', textAlign: 'center' },
+  container: {
+    flex: 1,
+    padding: 20,
+    paddingTop: 40,
+    backgroundColor: '#1e1e1e'
+  },
+  header: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+    color: '#fff'
+  },
+  section: {
+    marginVertical: 10
+  },
+  subHeader: {
+    fontSize: 20,
+    marginVertical: 15,
+    fontWeight: 'bold',
+    color: '#fff'
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#555',
+    marginBottom: 10,
+    borderRadius: 6,
+    padding: 10,
+    backgroundColor: '#333',
+    color: '#fff'
+  },
+  mealItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#444'
+  },
+  mealText: {
+    fontSize: 18,
+    color: '#fff'
+  },
+  deleteButton: {
+    fontSize: 16,
+    color: 'red'
+  },
+  text: {
+    fontSize: 16,
+    color: '#aaa',
+    textAlign: 'center'
+  }
 });

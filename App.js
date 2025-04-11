@@ -3,20 +3,22 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-// Screens
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import MealsEatenScreen from './screens/MealsEatenScreen';
 import MealsRecommendedScreen from './screens/MealsRecommendedScreen';
 import WorkoutScreen from './screens/WorkoutScreen';
+import PortfolioScreen from './screens/PortfolioScreen';
+
+import { UserProvider, useUser } from './contexts/UserContext';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Authenticated tabs
 function MainTabs() {
   return (
     <Tab.Navigator>
+      <Tab.Screen name="Portfolio" component={PortfolioScreen} />
       <Tab.Screen name="Meals Eaten" component={MealsEatenScreen} />
       <Tab.Screen name="Meals Recommended" component={MealsRecommendedScreen} />
       <Tab.Screen name="Workout" component={WorkoutScreen} />
@@ -24,8 +26,9 @@ function MainTabs() {
   );
 }
 
-export default function App() {
+function AppNavigator() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { loginUser } = useUser();
 
   return (
     <NavigationContainer>
@@ -33,7 +36,15 @@ export default function App() {
         {!isLoggedIn ? (
           <>
             <Stack.Screen name="Login">
-              {props => <LoginScreen {...props} onLoginSuccess={() => setIsLoggedIn(true)} />}
+              {(props) => (
+                <LoginScreen
+                  {...props}
+                  onLoginSuccess={(userData) => {
+                    loginUser(userData);
+                    setIsLoggedIn(true);
+                  }}
+                />
+              )}
             </Stack.Screen>
             <Stack.Screen name="Register" component={RegisterScreen} />
           </>
@@ -42,5 +53,13 @@ export default function App() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+  );
+}
+
+export default function App() {
+  return (
+    <UserProvider>
+      <AppNavigator />
+    </UserProvider>
   );
 }
